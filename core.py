@@ -19,23 +19,23 @@ headers = {
 def image_search(location: str):
     location = location
     yandex_format = "https://yandex.ru/images/search?rpt=imageview&url=" + location
-    print(yandex_format)
     soup = BeautifulSoup(requests.get(yandex_format, headers=headers).text, 'html.parser')
-    print("soup: ")
     img_url = []
     images = [img.attrs['src'] for img in soup.find_all('img') if 'src' in img.attrs]
     for url in images:
-        img_url.append(url)
+        if url in img_url:
+            print("Duplicate found")
+            pass
+        else:
+            print("New image found")
+            img_url.append(url)
     return img_url
-
 
 
 @app.route('/')
 def index():
-    print("index 1")
     image_urls = image_search(location)
-    print("index 2")
-    return render_template('index.html', image_urls=image_urls)
+    return render_template('index.html', image_urls=image_urls, i=len(image_urls))
 
 
 if __name__ == '__main__':
