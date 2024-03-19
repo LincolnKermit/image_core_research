@@ -1,53 +1,68 @@
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
-import requests
+import lib, requests, math, os, time
 
 app = Flask(__name__)
 img_url = []
+url = "0"
+location = input("URL : ")
 
 
-location = input("Enter the location of the image: ")
+def loading(x):
+    x = int(len(x))
+    y = round(100 / x)
+    z = round(100 / x)
+    starter = '['
+    ender = ']'
+    string = '*'
+    blank = '.'
 
-
-# Headers and cookies
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Referer": "https://www.google.com/",
-    "Connection": "keep-alive"
-}
-cookies = {
-    "AEC": "Ae3NU9MiziGWk6fjIRXbOH3MGyNaME4XK4OuUEB3FkQigtcaWu_-P5Xiew",
-    "NID": "512=FjqxFKCHZX_DX5eZAOVeui6C5VWMEXQyFBq1EFkyjHwVvAa9HkCpnsPwwXHHhhjkKp9BzG0wjShiDMIa8BjOGoQNqxRt1JXpTe5CG1WSpIMXkrP91lgUJw68t8hLwbN77AMkVl5dB96lntcbCUJeFgkaLbKdgDL8TwV6tkIruqZUqRRM",
-    "SOCS": "CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjQwMzA1LjA1X3AwGgJmciACGgYIgMLTrwY"
-}
+    while y < 100:
+        time.sleep(0.05)
+        os.system("clear")
+        y = y + z
+        space = (100 - y)
+        if y > 100:
+            print(starter + (string * 100) + ender)
+            print("100 %")
+            break
+        else:
+            print(starter + ((string * y) + (blank * space)) + ender)
+            print(y, "%")
 
 def yandex_search(location: str):
     location = location
     yandex_format = "https://yandex.ru/images/search?rpt=imageview&url=" + location
-    soup = BeautifulSoup(requests.get(yandex_format, headers=headers).text, 'html.parser')
+    soup = BeautifulSoup(requests.get(yandex_format, headers=lib.headers).text, 'html.parser')
+    if requests.status_codes == 200:
+        print("Fetching done.")
+    else:
+        print("Error during Fetching")
+
     images = [img.attrs['src'] for img in soup.find_all('img') if 'src' in img.attrs]
     for url in images:
         if url in img_url:
             print("Duplicate found from Yandex")
             pass
         else:
-            print("New image found from Yandex")
             img_url.append(url)
+            time.sleep(0.02)
+            loading(img_url)
     return img_url
 
 def google_search(location: str):
     location = location
     google_format = "https://lens.google.com/uploadbyurl?url=" + location
-    soup = BeautifulSoup(requests.get(google_format, headers=headers, cookies=cookies, allow_redirects=True).text, 'html.parser')
+    # TODO : allow cookie box = True
+    soup = BeautifulSoup(requests.get(google_format, headers=lib.headers, cookies=lib.cookies, allow_redirects=True).text, 'html.parser')
     for url in soup:
         if url.startwith("https://lens.google.com/search?ep="):
             redirect_url = url
             print(url)
-    soup = BeautifulSoup(requests.get(redirect_url, headers=headers, cookies=cookies).text, 'html.parser')
+    soup = BeautifulSoup(requests.get(redirect_url, headers=lib.headers, cookies=lib.cookies).text, 'html.parser')
         
     images = [img.attrs['src'] for img in soup.find_all('img') if 'src' in img.attrs]
+    # add or endwith .jpg .jpeg .png .webp
     
     for url in images:
         if url in img_url:
@@ -56,11 +71,9 @@ def google_search(location: str):
         else:
             print("New image found from Google")
             img_url.append(url)
+            loading(img_url)
     return img_url
 
-
-image_urls = yandex_search(location)
-image_urls += google_search(location)
 
 # Open web browser
 @app.route('/')
@@ -68,29 +81,16 @@ def index():
     return render_template('index.html', image_urls=image_urls, i=len(image_urls))
 
 
-if __name__ == '__main__':
-    print("\n")
-    print("Searching for images...")
-    print("\n")
-    print("Running on localhost - port 5000")
-    app.run(debug=False, port=5000)
+
+try:
+    image_urls = yandex_search(location)
+    if __name__ == '__main__':
+        print("\n")
+        print("Searching for images... \n Running on localhost - port 1337 - Debug = False")
+        app.run(debug=False, port=1337)
+        # port 1337
+except:
+    print("Error : "+requests.status_codes)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTCOqYnH96y4Ay_kBKYiU2hjB_p_QwX8qwXz7UPJuDqqEbQRqpY" class="wETe9b jFVN1" aria-hidden="true" data-iml="1235">
-
-'''
