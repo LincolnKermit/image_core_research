@@ -5,7 +5,7 @@ Image Core Researcher is hand-made tool for osint research purpose. (IMINT)
 
 This tools uses Yandex ( Note that the tool doesn't requires or use any API... )
 
-After fetching the matching image, the source of the image is sent to the flask server running on 127.0.0.1 on port 5000.
+After fetching the matching image, the source of the image is sent to the flask server running on 127.0.0.1 on port 1337.
 
 Please note that the tool is still in developpement and may have bugs or isn't strong enough to find more than 10 pictures
 
@@ -28,7 +28,7 @@ Install my-project with npm
 ```bash
   git clone https://github.com/Lincoln/image_core_research
   cd image_core_research/
-  pip3 install flask, requests, os
+  pip3 install flask, bs4
   python3 core.py
 ```
     
@@ -44,6 +44,6 @@ Install my-project with npm
 URL :
 
 ```bash
-  127.0.0.1:5000
+  127.0.0.1:1337
 ```
 
