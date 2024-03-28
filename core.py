@@ -9,6 +9,8 @@ if ImportError:
     except:
         exit()
 
+os.system("clear")
+
 
 app = Flask(__name__)
 img_url = []
@@ -36,7 +38,7 @@ else:
 title_yandex = ""
 code = 0
 
-def loading(x):
+def loading(x: int) -> int:
     x = int(len(x))
     y = round(100 / x)
     z = round(100 / x)
@@ -57,7 +59,7 @@ def loading(x):
             print(starter + ((string * y) + (blank * space)) + ender)
             print(y, "%")
 
-def yandex_search(location: str):
+def yandex_search(location: str) -> str:
     global title_yandex
     global description_yandex
     global code
@@ -92,7 +94,7 @@ def yandex_search(location: str):
             loading(img_url)
     return img_url
 
-def google_search(location: str):
+def google_search(location: str) -> str:
     location = location
     google_format = "https://lens.google.com/uploadbyurl?url=" + location
     # TODO : allow cookie box = True
