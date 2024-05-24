@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 import lib, requests, os
+import webbrowser as wb
 
 if ImportError:
     print("Error : "+str(ImportError))
@@ -8,6 +9,8 @@ if ImportError:
         os.system("pip3 install requests, bs4, flask")
     except:
         exit()
+
+
 
 os.system("clear")
 
@@ -136,4 +139,5 @@ description_yandex = description_yandex
 if __name__ == '__main__':
     print("\n")
     print(" * "+str(len(img_url))+" Results \n *  Running on localhost - port 1337 - Debug = False")
+    wb.open("localhost:1337")
     app.run(debug=False, port=1337)
