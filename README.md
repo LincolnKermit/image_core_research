@@ -23,7 +23,7 @@ Processed Image
 
 ## Installation
 
-Install my-project with npm
+Install my-project with git
 
 ```bash
   git clone https://github.com/Lincoln/image_core_research
