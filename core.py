@@ -3,21 +3,11 @@ from flask import Flask, render_template
 import lib, requests, os
 import webbrowser as wb
 
-if ImportError:
-    print("Error : "+str(ImportError))
-    try:
-        os.system("pip3 install requests, bs4, flask")
-    except:
-        exit()
-
-
-
 os.system("clear")
-
 
 app = Flask(__name__)
 img_url = []
-url = "0"
+url = ""
 location = input("URL : ")
 
 if location == "":
