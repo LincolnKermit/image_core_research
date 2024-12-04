@@ -29,7 +29,6 @@ else:
     else:
         print("URL doesn't seem to point to an image.")
 title_yandex = ""
-code = 0
 
 def loading(x: int) -> int:
     x = int(len(x))
@@ -55,11 +54,9 @@ def loading(x: int) -> int:
 def yandex_search(location: str) -> str:
     global title_yandex
     global description_yandex
-    global code
     location = location
     yandex_format = "https://yandex.ru/images/search?rpt=imageview&url=" + location
     response = requests.get(yandex_format, headers=lib.headers)
-    code = response.status_code
     soup = BeautifulSoup(response.text, 'html.parser')
     try:
         title_yandex = soup.find('h2', class_='CbirObjectResponse-Title').text
@@ -69,13 +66,13 @@ def yandex_search(location: str) -> str:
         description_yandex = soup.find('div', class_='CbirObjectResponse-Description').text
     except:
         description_yandex = "NO DESCRIPTION"
-    if code == 200:
+    if response.status_code == 200:
         print("Fetching done on Yandex.")
-    elif code == 301:
+    elif response.status_code == 301:
         print("Redirection detected, probably means you have been rate limited.")
     else:
         print("Error during Fetching on Yandex.")
-        exit("Error : "+str(code))
+        exit("Error : "+str(response.status_code))
 
     images = [img.attrs['src'] for img in soup.find_all('img') if 'src' in img.attrs]
     for url in images:
@@ -121,7 +118,7 @@ try:
     image_urls = yandex_search(location)
 except Exception as e:
     print("Error during Yandex Search:", e)
-    exit("Error : "+str(code))
+    exit("Error : "+str(response.status_code))
 
 title_yandex = title_yandex
 description_yandex = description_yandex
@@ -130,4 +127,4 @@ if __name__ == '__main__':
     print("\n")
     print(" * "+str(len(img_url))+" Results \n *  Running on localhost - port 1337 - Debug = False")
     wb.open("localhost:1337")
-    app.run(debug=False, port=1337)
+    app.run(debug=True, port=1337)
