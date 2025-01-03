@@ -6,9 +6,3 @@ headers = {
     "Referer": "https://www.google.com/",
     "Connection": "keep-alive"
 }
-
-cookies = {
-    "AEC": "Ae3NU9MiziGWk6fjIRXbOH3MGyNaME4XK4OuUEB3FkQigtcaWu_-P5Xiew",
-    "NID": "512=FjqxFKCHZX_DX5eZAOVeui6C5VWMEXQyFBq1EFkyjHwVvAa9HkCpnsPwwXHHhhjkKp9BzG0wjShiDMIa8BjOGoQNqxRt1JXpTe5CG1WSpIMXkrP91lgUJw68t8hLwbN77AMkVl5dB96lntcbCUJeFgkaLbKdgDL8TwV6tkIruqZUqRRM",
-    "SOCS": "CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjQwMzA1LjA1X3AwGgJmciACGgYIgMLTrwY"
-}
