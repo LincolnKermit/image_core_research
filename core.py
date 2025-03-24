@@ -7,17 +7,17 @@ os.system("clear")
 
 app = Flask(__name__)
 img_url = []
+image_extensions = (".jpg", ".jpeg", ".png", ".webp")
 url = ""
 location = input("URL : ")
 
 if location == "":
     print("URL is empty")
     exit()
-elif location.endswith((".jpg", ".jpeg", ".png", ".webp")):
+elif location.endswith(image_extensions):
     print("URL is a direct image link.")
 else:
     # Check if the URL contains one of the image extensions but does not end with it
-    image_extensions = (".jpg", ".jpeg", ".png", ".webp")
     if any(ext in location for ext in image_extensions):
         # Find the position of the image extension
         for ext in image_extensions:
@@ -82,7 +82,7 @@ def yandex_search(location: str) -> str:
         else:
             img_url.append(url)
             loading(img_url)
-    return img_url
+    return img_url, response.status_code
 
 def google_search(location: str) -> str:
     location = location
@@ -118,7 +118,6 @@ try:
     image_urls = yandex_search(location)
 except Exception as e:
     print("Error during Yandex Search:", e)
-    exit("Error : "+str(response.status_code))
 
 title_yandex = title_yandex
 description_yandex = description_yandex
