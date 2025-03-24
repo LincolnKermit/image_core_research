@@ -3,6 +3,9 @@ from flask import Flask, render_template
 import lib, requests, os
 import webbrowser as wb
 
+
+PORT = 1337
+DEBUG_MODE = True
 os.system("clear")
 
 app = Flask(__name__)
@@ -89,6 +92,7 @@ def google_search(location: str) -> str:
     google_format = "https://lens.google.com/uploadbyurl?url=" + location
     # TODO : allow cookie box = True
     soup = BeautifulSoup(requests.get(google_format, headers=lib.headers, cookies=lib.cookies, allow_redirects=True).text, 'html.parser')
+    # lib.cookie is empty. TO FIX
     for url in soup:
         if url.startwith("https://lens.google.com/search?ep="):
             redirect_url = url
@@ -96,6 +100,7 @@ def google_search(location: str) -> str:
         else:
             ("Google URL Redirect Error, Still trying to fetch the image...")
     soup = BeautifulSoup(requests.get(redirect_url, headers=lib.headers, cookies=lib.cookies).text, 'html.parser')
+    # lib.cookie is empty. TO FIX
     images = [img.attrs['src'] for img in soup.find_all('img') if 'src' in img.attrs]
     # add or endwith .jpg .jpeg .png .webp
     for url in images:
@@ -124,6 +129,6 @@ description_yandex = description_yandex
 
 if __name__ == '__main__':
     print("\n")
-    print(" * "+str(len(img_url))+" Results \n *  Running on localhost - port 1337 - Debug = False")
-    wb.open("localhost:1337")
-    app.run(debug=True, port=1337)
+    print(" * "+str(len(img_url))+f" Results \n *  Running on localhost - port {PORT} - Debug = {DEBUG_MODE}")
+    wb.open(f"localhost:{PORT}")
+    app.run(debug=DEBUG_MODE, port=PORT)
